@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Jemima\'s Groceries</string>
+    <string name="title_activity_add_grocery">Add a grocery item</string>
+    <string name="title_activity_add_inventory_item">Add an inventory item</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="groceries">Groceries</string>
+    <string name="inventory">Inventory</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="label_name">Name</string>
+    <string name="label_qty">Quantity</string>
+    <string name="label_expiration_date">Expiration</string>
+
+    <string name="hint_name">What\'s the name of the item?</string>
+    <string name="hint_qty">How many?</string>
+    <string name="hint_expiration_date">When will the item expire?</string>
+
+</resources>
