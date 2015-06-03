@@ -28,6 +28,9 @@ public class GroceriesProvider extends ContentProvider {
     private static final String sInventoryItemNameSelectionUsingLike =
             GroceriesContract.InventoryEntry.COLUMN_NAME + " LIKE %?% ";
 
+    private static final String sInventoryLessThanGivenDateSelection =
+            GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " <= ? ";
+
     public static final String sActiveGrocerySelection =
             GroceriesContract.GroceryEntry.COLUMN_STATUS + " = "
             + GroceriesContract.GroceryEntry.STATUS_ACTIVE + " ";
@@ -62,6 +65,57 @@ public class GroceriesProvider extends ContentProvider {
         );
     }
 
+    private Cursor getGroceriesByName(Uri uri, String[] projection, String sortOrder) {
+        String name = GroceriesContract.GroceryEntry.getNameFromUri(uri);
+
+        String selection = sGroceryNameSelectionUsingLike;
+        String[] selectionArgs = new String[]{name};
+
+        return mOpenHelper.getReadableDatabase().query(
+                GroceriesContract.GroceryEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getInventoryByName(Uri uri, String[] projection, String sortOrder){
+        String name = GroceriesContract.InventoryEntry.getNameFromUri(uri);
+
+        String selection = sInventoryItemNameSelectionUsingLike;
+        String[] selectionArgs = new String[]{name};
+
+        return mOpenHelper.getReadableDatabase().query(
+                GroceriesContract.InventoryEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getInventoryByDate(Uri uri, String[] projection, String sortOrder){
+        long date = GroceriesContract.InventoryEntry.getDateFromUri(uri);
+
+        String selection = sInventoryLessThanGivenDateSelection;
+        String[] selectionArgs = new String[]{Long.toString(date)};
+
+        return mOpenHelper.getReadableDatabase().query(
+                GroceriesContract.InventoryEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     @Override
     public boolean onCreate() {
         mOpenHelper = new GroceriesDbHelper(getContext());
@@ -80,6 +134,21 @@ public class GroceriesProvider extends ContentProvider {
             // "inventory"
             case INVENTORY: {
                 retCursor = getAllInventory(projection, selection, selectionArgs, sortOrder);
+                break;
+            }
+            // "groceries/*"
+            case GROCERIES_WITH_NAME: {
+                retCursor = getGroceriesByName(uri, projection, sortOrder);
+                break;
+            }
+            // "inventory/name/*"
+            case INVENTORY_WITH_NAME: {
+                retCursor = getInventoryByName(uri, projection, sortOrder);
+                break;
+            }
+            // "inventory/date/#"
+            case INVENTORY_WITH_DATE: {
+                retCursor = getInventoryByDate(uri, projection, sortOrder);
                 break;
             }
 

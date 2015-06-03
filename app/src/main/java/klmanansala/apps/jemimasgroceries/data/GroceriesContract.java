@@ -58,6 +58,10 @@ public class GroceriesContract {
         public static Uri buildGroceryUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static String getNameFromUri(Uri uri){
+            return uri.getPathSegments().get(1);
+        }
     }
 
     public static final class InventoryEntry implements BaseColumns {
@@ -84,6 +88,14 @@ public class GroceriesContract {
 
         public static Uri buildInventoryUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static String getNameFromUri(Uri uri){
+            return uri.getPathSegments().get(2);
+        }
+
+        public static long getDateFromUri(Uri uri){
+            return Long.parseLong(uri.getPathSegments().get(2));
         }
     }
 }
