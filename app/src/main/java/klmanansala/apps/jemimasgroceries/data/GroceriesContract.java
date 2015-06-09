@@ -58,6 +58,10 @@ public class GroceriesContract {
         public static Uri buildGroceryUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildGroceriesWithNameUri(String name) {
+            return CONTENT_URI.buildUpon().appendPath(name).build();
+        }
     }
 
     public static final class InventoryEntry implements BaseColumns {
@@ -84,6 +88,19 @@ public class GroceriesContract {
 
         public static Uri buildInventoryUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildInventoryWithNameUri(String name) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath("name")
+                    .appendPath(name).build();
+        }
+
+        public static Uri buildInventoryWithDateUri(long date) {
+            long normalizedDate = normalizeDate(date);
+            return CONTENT_URI.buildUpon()
+                    .appendPath("date")
+                    .appendPath(Long.toString(normalizedDate)).build();
         }
     }
 }
