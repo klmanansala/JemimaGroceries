@@ -59,6 +59,10 @@ public class GroceriesContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static String getNameFromUri(Uri uri){
+            return uri.getPathSegments().get(1);
+        }
+        
         public static Uri buildGroceriesWithNameUri(String name) {
             return CONTENT_URI.buildUpon().appendPath(name).build();
         }
@@ -90,12 +94,20 @@ public class GroceriesContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static String getNameFromUri(Uri uri){
+            return uri.getPathSegments().get(2);
+        }
+
+        public static long getDateFromUri(Uri uri){
+            return Long.parseLong(uri.getPathSegments().get(2));
+        }
+        
         public static Uri buildInventoryWithNameUri(String name) {
             return CONTENT_URI.buildUpon()
                     .appendPath("name")
                     .appendPath(name).build();
         }
-
+        
         public static Uri buildInventoryWithDateUri(long date) {
             long normalizedDate = normalizeDate(date);
             return CONTENT_URI.buildUpon()
