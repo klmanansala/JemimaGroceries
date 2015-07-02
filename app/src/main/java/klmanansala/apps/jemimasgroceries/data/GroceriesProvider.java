@@ -23,10 +23,10 @@ public class GroceriesProvider extends ContentProvider {
     static final int INVENTORY_WITH_DATE = 202;
 
     private static final String sGroceryNameSelectionUsingLike =
-            GroceriesContract.GroceryEntry.COLUMN_NAME + " LIKE %?% ";
+            GroceriesContract.GroceryEntry.COLUMN_NAME + " LIKE ? ";
 
     private static final String sInventoryItemNameSelectionUsingLike =
-            GroceriesContract.InventoryEntry.COLUMN_NAME + " LIKE %?% ";
+            GroceriesContract.InventoryEntry.COLUMN_NAME + " LIKE ? ";
 
     private static final String sInventoryLessThanGivenDateSelection =
             GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " <= ? ";
@@ -69,7 +69,7 @@ public class GroceriesProvider extends ContentProvider {
         String name = GroceriesContract.GroceryEntry.getNameFromUri(uri);
 
         String selection = sGroceryNameSelectionUsingLike;
-        String[] selectionArgs = new String[]{name};
+        String[] selectionArgs = new String[]{"%" + name + "%"};
 
         return mOpenHelper.getReadableDatabase().query(
                 GroceriesContract.GroceryEntry.TABLE_NAME,
@@ -86,7 +86,7 @@ public class GroceriesProvider extends ContentProvider {
         String name = GroceriesContract.InventoryEntry.getNameFromUri(uri);
 
         String selection = sInventoryItemNameSelectionUsingLike;
-        String[] selectionArgs = new String[]{name};
+        String[] selectionArgs = new String[]{"%" + name + "%"};
 
         return mOpenHelper.getReadableDatabase().query(
                 GroceriesContract.InventoryEntry.TABLE_NAME,
@@ -100,10 +100,10 @@ public class GroceriesProvider extends ContentProvider {
     }
 
     private Cursor getInventoryByDate(Uri uri, String[] projection, String sortOrder){
-        long date = GroceriesContract.InventoryEntry.getDateFromUri(uri);
+        String date = GroceriesContract.InventoryEntry.getDateFromUri(uri);
 
         String selection = sInventoryLessThanGivenDateSelection;
-        String[] selectionArgs = new String[]{Long.toString(date)};
+        String[] selectionArgs = new String[]{date};
 
         return mOpenHelper.getReadableDatabase().query(
                 GroceriesContract.InventoryEntry.TABLE_NAME,

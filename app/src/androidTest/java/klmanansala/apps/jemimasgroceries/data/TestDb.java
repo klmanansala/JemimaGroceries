@@ -7,8 +7,6 @@ import android.test.AndroidTestCase;
 
 import java.util.HashSet;
 
-import klmanansala.apps.jemimasgroceries.TestUtilities;
-
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
