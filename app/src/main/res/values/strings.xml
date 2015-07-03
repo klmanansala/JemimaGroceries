@@ -18,4 +18,6 @@
     <string name="hint_qty">How many?</string>
     <string name="hint_expiration_date">When will the item expire?</string>
 
+    <string name="empty_grocery_list">Grocery time! Start listing down items.</string>
+    <string name="grocery_item_saved">Added grocery item!</string>
 </resources>

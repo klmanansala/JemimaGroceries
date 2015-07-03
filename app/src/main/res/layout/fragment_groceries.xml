@@ -22,4 +22,11 @@
         android:id="@+id/btn_add_groceries"
         android:src="@drawable/add_icon" />
 
+    <TextView
+        android:id="@+id/empty_grocery_list"
+        android:text="@string/empty_grocery_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center" />
+
 </LinearLayout>

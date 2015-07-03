@@ -2,17 +2,35 @@ package klmanansala.apps.jemimasgroceries;
 
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
+import klmanansala.apps.jemimasgroceries.data.GroceriesProvider;
 
-public class GroceriesFragment extends Fragment {
+
+public class GroceriesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final String[] COLUMNS = {
+            GroceriesContract.GroceryEntry._ID
+            ,GroceriesContract.GroceryEntry.COLUMN_NAME
+    };
+
+    static final int COL_ID = 0;
+    static final int COL_NAME = 1;
+
+    private static final int GROCERY_LOADER_ID = 1;
+
+    private GroceriesAdapter mGroceriesAdapter;
 
     public GroceriesFragment() {
     }
@@ -22,20 +40,13 @@ public class GroceriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_groceries, container, false);
 
-        String dummyData[] = new String[]{
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item"
-        };
-
-        ArrayAdapter dummyAdapter = new ArrayAdapter<String>(getActivity(), R.layout.grocery_item_layout, dummyData);
+        mGroceriesAdapter = new GroceriesAdapter(getActivity(), null, 0);
 
         ListView groceryList = (ListView) view.findViewById(R.id.listview_groceries);
-        groceryList.setAdapter(dummyAdapter);
+        groceryList.setAdapter(mGroceriesAdapter);
+
+        View emptyView = view.findViewById(R.id.empty_grocery_list);
+        groceryList.setEmptyView(emptyView);
 
         ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_groceries);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -46,5 +57,28 @@ public class GroceriesFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(GROCERY_LOADER_ID, null, this);
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), GroceriesContract.GroceryEntry.CONTENT_URI
+                , COLUMNS, GroceriesProvider.sActiveGrocerySelection, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mGroceriesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mGroceriesAdapter.swapCursor(null);
     }
 }
