@@ -20,4 +20,7 @@
 
     <string name="empty_grocery_list">Grocery time! Start listing down items.</string>
     <string name="grocery_item_saved">Added grocery item!</string>
+    <string name="item_name_is_empty">Please enter a name for the item</string>
+    <string name="item_qunatity_is_empty">Please enter how many of the item you want to buy</string>
+    <string name="item_already_on_the_list">You already have that item on your list.</string>
 </resources>

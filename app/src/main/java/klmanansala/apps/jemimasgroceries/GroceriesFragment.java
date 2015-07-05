@@ -23,10 +23,14 @@ public class GroceriesFragment extends Fragment implements LoaderManager.LoaderC
     private static final String[] COLUMNS = {
             GroceriesContract.GroceryEntry._ID
             ,GroceriesContract.GroceryEntry.COLUMN_NAME
+            , GroceriesContract.GroceryEntry.COLUMN_QUANTITY
+            , GroceriesContract.GroceryEntry.COLUMN_CHECKED
     };
 
     static final int COL_ID = 0;
     static final int COL_NAME = 1;
+    static final int COL_QTY = 2;
+    static final int COL_CHECKED = 3;
 
     private static final int GROCERY_LOADER_ID = 1;
 
@@ -68,8 +72,10 @@ public class GroceriesFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
+        String sortOrder = GroceriesContract.GroceryEntry.COLUMN_CHECKED + " ASC";
+
         return new CursorLoader(getActivity(), GroceriesContract.GroceryEntry.CONTENT_URI
-                , COLUMNS, GroceriesProvider.sActiveGrocerySelection, null, null);
+                , COLUMNS, GroceriesProvider.sActiveGrocerySelection, null, sortOrder);
     }
 
     @Override

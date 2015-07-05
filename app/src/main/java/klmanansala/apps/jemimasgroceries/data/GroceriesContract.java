@@ -24,6 +24,7 @@ public class GroceriesContract {
     // Possible paths (appended to base content URI for possible URI's)
     public static final String PATH_GROCERIES = "groceries";
     public static final String PATH_INVENTORY = "inventory";
+    public static final String PATH_ITEMNAMES = "itemnames";
 
     // To make it easy to query for the exact date, we normalize all dates that go into
     // the database to the start of the the Julian day at UTC.
@@ -44,8 +45,13 @@ public class GroceriesContract {
 
         public static final String COLUMN_STATUS = "status";
 
+        public static final String COLUMN_CHECKED = "checked";
+
         public static final int STATUS_ACTIVE = 1;
         public static final int STATUS_REMOVED = 0;
+
+        public static final int CHECKED = 1;
+        public static final int UNCHECKED = 0;
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_GROCERIES).build();
@@ -114,5 +120,24 @@ public class GroceriesContract {
                     .appendPath("date")
                     .appendPath(Long.toString(normalizedDate)).build();
         }
+    }
+
+    public static final class ItemNameEntry implements BaseColumns {
+        public static final String TABLE_NAME = "itemname";
+
+        public static final String COLUMN_NAME = "name";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ITEMNAMES).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMNAMES;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMNAMES;
+
+        public static Uri buildItemNameUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
     }
 }

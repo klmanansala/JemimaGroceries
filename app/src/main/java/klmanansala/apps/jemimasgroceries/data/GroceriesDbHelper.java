@@ -22,7 +22,8 @@ public class GroceriesDbHelper extends SQLiteOpenHelper{
 
                 GroceriesContract.GroceryEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                 GroceriesContract.GroceryEntry.COLUMN_QUANTITY + " INTEGER NOT NULL, " +
-                GroceriesContract.GroceryEntry.COLUMN_STATUS + " INTEGER NOT NULL" +
+                GroceriesContract.GroceryEntry.COLUMN_STATUS + " INTEGER NOT NULL, " +
+                GroceriesContract.GroceryEntry.COLUMN_CHECKED + " INTEGER NOT NULL" +
                 ");";
 
         final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + GroceriesContract.InventoryEntry.TABLE_NAME + " (" +
@@ -33,8 +34,14 @@ public class GroceriesDbHelper extends SQLiteOpenHelper{
                 GroceriesContract.InventoryEntry.COLUMN_STATUS + " INTEGER NOT NULL" +
                 ");";
 
+        final String SQL_CREATE_ITEMNAME_TABLE = "CREATE TABLE " + GroceriesContract.ItemNameEntry.TABLE_NAME + " ("
+                + GroceriesContract.ItemNameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + GroceriesContract.ItemNameEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL"
+                + ");";
+
         sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ITEMNAME_TABLE);
     }
 
     @Override
@@ -42,6 +49,7 @@ public class GroceriesDbHelper extends SQLiteOpenHelper{
         //for now whenever schema changes, drop the old tables and create the new ones
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GroceriesContract.GroceryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GroceriesContract.InventoryEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GroceriesContract.ItemNameEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

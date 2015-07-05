@@ -40,6 +40,7 @@ public class TestUtilities extends AndroidTestCase {
         groceryValues.put(GroceriesContract.GroceryEntry.COLUMN_NAME, "dummy name");
         groceryValues.put(GroceriesContract.GroceryEntry.COLUMN_QUANTITY, 5);
         groceryValues.put(GroceriesContract.GroceryEntry.COLUMN_STATUS, 1);
+        groceryValues.put(GroceriesContract.GroceryEntry.COLUMN_CHECKED, 1);
 
         return groceryValues;
     }

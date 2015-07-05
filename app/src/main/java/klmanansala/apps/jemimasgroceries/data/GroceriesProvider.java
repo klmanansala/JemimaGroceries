@@ -21,6 +21,7 @@ public class GroceriesProvider extends ContentProvider {
     static final int INVENTORY = 200;
     static final int INVENTORY_WITH_NAME = 201;
     static final int INVENTORY_WITH_DATE = 202;
+    static final int ITEMNAMES = 300;
 
     private static final String sGroceryNameSelectionUsingLike =
             GroceriesContract.GroceryEntry.COLUMN_NAME + " LIKE ? ";
@@ -56,6 +57,19 @@ public class GroceriesProvider extends ContentProvider {
                                    String sortOrder) {
         return mOpenHelper.getReadableDatabase().query(
                 GroceriesContract.InventoryEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getAllItemNames(String[] projection, String selection, String[] selectionArgs,
+                                   String sortOrder) {
+        return mOpenHelper.getReadableDatabase().query(
+                GroceriesContract.ItemNameEntry.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -151,6 +165,11 @@ public class GroceriesProvider extends ContentProvider {
                 retCursor = getInventoryByDate(uri, projection, sortOrder);
                 break;
             }
+            // "itemnames"
+            case ITEMNAMES: {
+                retCursor = getAllItemNames(projection, selection, selectionArgs, sortOrder);
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -175,6 +194,8 @@ public class GroceriesProvider extends ContentProvider {
                 return GroceriesContract.InventoryEntry.CONTENT_TYPE;
             case INVENTORY_WITH_NAME:
                 return GroceriesContract.InventoryEntry.CONTENT_TYPE;
+            case ITEMNAMES:
+                return GroceriesContract.ItemNameEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -184,7 +205,7 @@ public class GroceriesProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
-        Uri returnUri;
+        Uri returnUri = null;
 
         switch (match) {
             case GROCERIES: {
@@ -205,6 +226,16 @@ public class GroceriesProvider extends ContentProvider {
                 }
                 break;
             }
+            case ITEMNAMES: {
+                nameToLowerCase(values);
+                long _id = db.insert(GroceriesContract.ItemNameEntry.TABLE_NAME, null, values);
+                if ( _id > 0 ){
+                    returnUri = GroceriesContract.ItemNameEntry.buildItemNameUri(_id);
+                } else {
+                    throw new SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -217,6 +248,16 @@ public class GroceriesProvider extends ContentProvider {
         if (values.containsKey(GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE)) {
             long dateValue = values.getAsLong(GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE);
             values.put(GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE, GroceriesContract.normalizeDate(dateValue));
+        }
+    }
+
+    private void nameToLowerCase(ContentValues values){
+        if (values.containsKey(GroceriesContract.ItemNameEntry.COLUMN_NAME)){
+            String name = values.getAsString(GroceriesContract.ItemNameEntry.COLUMN_NAME);
+            if(name != null) {
+                name = name.toLowerCase();
+                values.put(GroceriesContract.ItemNameEntry.COLUMN_NAME, name);
+            }
         }
     }
 
@@ -234,6 +275,10 @@ public class GroceriesProvider extends ContentProvider {
             }
             case INVENTORY: {
                 rowsDeleted = db.delete(GroceriesContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case ITEMNAMES: {
+                rowsDeleted = db.delete(GroceriesContract.ItemNameEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
             default:
@@ -264,6 +309,11 @@ public class GroceriesProvider extends ContentProvider {
                 rowsUpdated = db.update(GroceriesContract.InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
+            case ITEMNAMES: {
+                nameToLowerCase(values);
+                rowsUpdated = db.update(GroceriesContract.ItemNameEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -287,6 +337,7 @@ public class GroceriesProvider extends ContentProvider {
         uriMatcher.addURI(GroceriesContract.CONTENT_AUTHORITY, GroceriesContract.PATH_GROCERIES + "/*", GROCERIES_WITH_NAME);
         uriMatcher.addURI(GroceriesContract.CONTENT_AUTHORITY, GroceriesContract.PATH_INVENTORY + "/name/*", INVENTORY_WITH_NAME);
         uriMatcher.addURI(GroceriesContract.CONTENT_AUTHORITY, GroceriesContract.PATH_INVENTORY + "/date/#", INVENTORY_WITH_DATE);
+        uriMatcher.addURI(GroceriesContract.CONTENT_AUTHORITY, GroceriesContract.PATH_ITEMNAMES, ITEMNAMES);
 
         // 3) Return the new matcher!
         return uriMatcher;
