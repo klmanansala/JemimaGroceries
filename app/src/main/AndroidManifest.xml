@@ -32,9 +32,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="klmanansala.apps.jemimasgroceries.MainActivity" />
         </activity>
+
         <provider
-            android:authorities="klmanansala.apps.jemimasgroceries"
-            android:name=".data.GroceriesProvider" />
+            android:name=".data.GroceriesProvider"
+            android:authorities="klmanansala.apps.jemimasgroceries" />
+
+        <activity
+            android:name=".EditGroceryItemActivity"
+            android:label="@string/title_activity_edit_grocery_item"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="klmanansala.apps.jemimasgroceries.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

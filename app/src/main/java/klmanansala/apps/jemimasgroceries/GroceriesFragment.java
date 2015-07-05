@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -51,6 +52,21 @@ public class GroceriesFragment extends Fragment implements LoaderManager.LoaderC
 
         View emptyView = view.findViewById(R.id.empty_grocery_list);
         groceryList.setEmptyView(emptyView);
+
+        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+                if(cursor != null){
+                    long itemId = cursor.getLong(COL_ID);
+
+                    Intent intent = new Intent(getActivity(), EditGroceryItemActivity.class);
+                    intent.putExtra(GroceriesContract.GroceryEntry._ID, itemId);
+                    startActivity(intent);
+                }
+            }
+        });
 
         ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_groceries);
         addButton.setOnClickListener(new View.OnClickListener() {

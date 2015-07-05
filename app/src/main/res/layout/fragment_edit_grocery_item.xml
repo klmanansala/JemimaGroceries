@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="2"
-    android:rowCount="3"
+    android:rowCount="5"
     android:orientation="horizontal"
     android:padding="16dp">
 
@@ -41,12 +41,35 @@
         android:hint="@string/hint_qty"
         android:inputType="number"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="@string/label_checked"
+        android:id="@+id/textView3"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:paddingRight="16dp" />
+
+    <CheckBox
+        android:id="@+id/grocery_item_checkbox"
+        android:layout_row="2"
+        android:layout_column="1"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_add"
-        android:id="@+id/btn_add_grocery"
-        android:layout_row="2"
+        android:text="@string/btn_save"
+        android:id="@+id/btn_save_grocery"
+        android:layout_row="3"
+        android:layout_column="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_delete"
+        android:id="@+id/btn_delete_grocery"
+        android:layout_row="4"
         android:layout_column="1" />
 
 </GridLayout>
