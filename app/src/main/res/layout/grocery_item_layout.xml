@@ -21,7 +21,8 @@
         android:id="@+id/list_item_grocery"
         android:layout_weight="3"
         android:text="sample item"
-        android:paddingLeft="8dp">
+        android:paddingLeft="8dp"
+        android:fontFamily="sans-serif-medium" >
     </TextView>
 
     <CheckBox

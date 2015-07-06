@@ -26,8 +26,20 @@ public class InventoryAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView nameTxt = (TextView) view.findViewById(R.id.list_item_inventory);
+        TextView dateTxt = (TextView) view.findViewById(R.id.list_item_inventory_exp_date);
 
         String name = cursor.getString(InventoryFragment.COL_NAME);
-        nameTxt.setText(name);
+        String qty = Integer.toString(cursor.getInt(InventoryFragment.COL_QTY));
+        nameTxt.setText(name + " - " + qty);
+
+        long date = cursor.getLong(InventoryFragment.COL_DATE);
+        String dateString = context.getString(R.string.none);
+
+        if(date != 0){
+            dateString = Utility.getFormattedDate(date);
+        }
+
+        String expDateString = context.getString(R.string.format_exp_date_inventory_list_item, dateString);
+        dateTxt.setText(expDateString);
     }
 }
