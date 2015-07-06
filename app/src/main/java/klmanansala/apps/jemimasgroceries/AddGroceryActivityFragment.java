@@ -36,6 +36,7 @@ public class AddGroceryActivityFragment extends Fragment {
         mNameTxt = (AutoCompleteTextView) view.findViewById(R.id.text_grocery_name);
         mQuantityTxt = (EditText) view.findViewById(R.id.text_grocery_qty);
 
+        //for autocomplete suggestions
         SimpleCursorAdapter itemNamesAdapter = new SimpleCursorAdapter(getActivity()
                 , android.R.layout.simple_list_item_1
                 , null
@@ -92,9 +93,6 @@ public class AddGroceryActivityFragment extends Fragment {
         values.put(GroceriesContract.GroceryEntry.COLUMN_STATUS, GroceriesContract.GroceryEntry.STATUS_ACTIVE);
         values.put(GroceriesContract.GroceryEntry.COLUMN_CHECKED, GroceriesContract.GroceryEntry.UNCHECKED);
 
-        ContentValues itemNameValues = new ContentValues();
-        itemNameValues.put(GroceriesContract.ItemNameEntry.COLUMN_NAME, name);
-
         try {
             Uri uri = getActivity().getContentResolver().insert(GroceriesContract.GroceryEntry.CONTENT_URI, values);
 
@@ -108,11 +106,7 @@ public class AddGroceryActivityFragment extends Fragment {
                 mNameTxt.setText("");
                 mQuantityTxt.setText("");
 
-                try {
-                    getActivity().getContentResolver().insert(GroceriesContract.ItemNameEntry.CONTENT_URI, itemNameValues);
-                } catch (SQLException ex){
-                    //just ignore, thsi is a case of the item name saved already in the db
-                }
+                Utility.addItemNameEntry(getActivity(), name);
             }
         } catch (SQLException ex){
             Toast.makeText(getActivity()

@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:descendantFocusability="blocksDescendants">
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/grocery_item" />
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_grocery"
         android:layout_weight="3"
-        android:text="sample item">
+        android:text="sample item"
+        android:paddingLeft="8dp">
     </TextView>
 
     <CheckBox

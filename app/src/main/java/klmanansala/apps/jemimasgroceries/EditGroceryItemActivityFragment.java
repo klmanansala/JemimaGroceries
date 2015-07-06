@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
 
@@ -42,6 +43,9 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
     private static int LOADER_ID = 1;
 
     private long itemId = 0;
+    private AutoCompleteTextView nameTxt;
+    private EditText qtyTxt;
+    private CheckBox checkbox;
 
     public EditGroceryItemActivityFragment() {
     }
@@ -96,9 +100,9 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
 
         View rootView = getView();
 
-        AutoCompleteTextView nameTxt = (AutoCompleteTextView) rootView.findViewById(R.id.text_grocery_name);
-        EditText qtyTxt = (EditText) rootView.findViewById(R.id.text_grocery_qty);
-        CheckBox checkbox = (CheckBox) rootView.findViewById(R.id.grocery_item_checkbox);
+        nameTxt = (AutoCompleteTextView) rootView.findViewById(R.id.text_grocery_name);
+        qtyTxt = (EditText) rootView.findViewById(R.id.text_grocery_qty);
+        checkbox = (CheckBox) rootView.findViewById(R.id.grocery_item_checkbox);
 
         nameTxt.setText(data.getString(COL_NAME));
         qtyTxt.setText(Integer.toString(data.getInt(COL_QTY)));
@@ -129,6 +133,50 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
 
     private void updateGroceryItem(){
         ContentValues updatedValues = new ContentValues();
+
+        String name = nameTxt.getText().toString();
+        String qtyString = qtyTxt.getText().toString();
+
+        if(name == null || name.length() == 0){
+            Toast.makeText(getActivity()
+                    , R.string.item_name_is_empty
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(qtyString == null || qtyString.length() == 0){
+            Toast.makeText(getActivity()
+                    , R.string.item_qunatity_is_empty
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        updatedValues.put(GroceriesContract.GroceryEntry._ID, itemId);
+        updatedValues.put(GroceriesContract.GroceryEntry.COLUMN_NAME, name);
+        updatedValues.put(GroceriesContract.GroceryEntry.COLUMN_QUANTITY, Integer.parseInt(qtyString));
+
+        if(checkbox.isChecked()){
+            Log.d(LOG_TAG, "setting checked");
+            updatedValues.put(GroceriesContract.GroceryEntry.COLUMN_CHECKED, GroceriesContract.GroceryEntry.CHECKED);
+        } else {
+            Log.d(LOG_TAG, "setting unchecked");
+            updatedValues.put(GroceriesContract.GroceryEntry.COLUMN_CHECKED, GroceriesContract.GroceryEntry.UNCHECKED);
+        }
+
+        String selection = GroceriesContract.GroceryEntry._ID + " = ? ";
+        String args[] = new String[] { Long.toString(itemId) };
+        int count = getActivity().getContentResolver().update(GroceriesContract.GroceryEntry.CONTENT_URI
+                , updatedValues
+                , selection
+                , args);
+
+        Utility.addItemNameEntry(getActivity(), name);
+
+        if(count != 1){
+            Log.d(LOG_TAG, "Updating grocery item with id = " + itemId + " returned a count not equal to one.");
+        }
+
+        getActivity().finish();
     }
 
     private void deleteGroceryItem(){

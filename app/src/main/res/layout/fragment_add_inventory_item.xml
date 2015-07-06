@@ -14,7 +14,7 @@
         android:id="@+id/textView"
         android:paddingRight="16dp" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_inventory_item_name"

@@ -1,16 +1,38 @@
 package klmanansala.apps.jemimasgroceries;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-public class InventoryFragment extends Fragment{
+import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
+import klmanansala.apps.jemimasgroceries.data.GroceriesProvider;
+
+public class InventoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final String[] COLUMNS = {
+            GroceriesContract.InventoryEntry._ID
+            , GroceriesContract.InventoryEntry.COLUMN_NAME
+            , GroceriesContract.InventoryEntry.COLUMN_QUANTITY
+            , GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE
+    };
+
+    static final int COL_ID = 0;
+    static final int COL_NAME = 1;
+    static final int COL_QTY = 2;
+    static final int COL_DATE = 3;
+
+    private InventoryAdapter mInventoryAdapter;
+
+    private static final int INVENTORY_LOADER_ID = 1;
 
     public InventoryFragment() {
     }
@@ -20,20 +42,10 @@ public class InventoryFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
 
-        String dummyData[] = new String[]{
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item",
-                "sample item"
-        };
-
-        ArrayAdapter dummyAdapter = new ArrayAdapter<String>(getActivity(), R.layout.inventory_item_layout, dummyData);
+        mInventoryAdapter = new InventoryAdapter(getActivity(), null, 0);
 
         ListView groceryList = (ListView) view.findViewById(R.id.listview_inventory);
-        groceryList.setAdapter(dummyAdapter);
+        groceryList.setAdapter(mInventoryAdapter);
 
         ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -45,5 +57,28 @@ public class InventoryFragment extends Fragment{
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(INVENTORY_LOADER_ID, null, this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), GroceriesContract.InventoryEntry.CONTENT_URI
+                , COLUMNS, GroceriesProvider.sActiveInventorySelection, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mInventoryAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mInventoryAdapter.swapCursor(null);
     }
 }

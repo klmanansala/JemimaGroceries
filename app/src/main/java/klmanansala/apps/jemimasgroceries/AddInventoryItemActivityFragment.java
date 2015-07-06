@@ -2,14 +2,24 @@ package klmanansala.apps.jemimasgroceries;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -21,7 +31,11 @@ import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
  */
 public class AddInventoryItemActivityFragment extends Fragment {
 
+    private static long mEnteredDate = 0;
+
     private static EditText mDateText;
+    private AutoCompleteTextView mNameTxt;
+    private EditText mQuantityTxt;
 
     public AddInventoryItemActivityFragment() {
     }
@@ -38,6 +52,41 @@ public class AddInventoryItemActivityFragment extends Fragment {
                 showDatePickerDialog();
             }
         });
+
+        mNameTxt = (AutoCompleteTextView) view.findViewById(R.id.text_inventory_item_name);
+        mQuantityTxt = (EditText) view.findViewById(R.id.text_inventory_item_qty);
+
+        //for autocomplete suggestions
+        SimpleCursorAdapter itemNamesAdapter = new SimpleCursorAdapter(getActivity()
+                , android.R.layout.simple_list_item_1
+                , null
+                , new String[] {GroceriesContract.ItemNameEntry.COLUMN_NAME}
+                , new int[] { android.R.id.text1}
+                , 0);
+        mNameTxt.setAdapter(itemNamesAdapter);
+
+        itemNamesAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                return Utility.getItemNamesCursor(getActivity(), constraint);
+            }
+        });
+
+        itemNamesAdapter.setCursorToStringConverter(new android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter() {
+            public CharSequence convertToString(Cursor cur) {
+                int index = cur.getColumnIndex(GroceriesContract.ItemNameEntry.COLUMN_NAME);
+                return cur.getString(index);
+            }
+        });
+
+        Button addBtn = (Button) view.findViewById(R.id.btn_add_inventory);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addInventoryItemToDb();
+            }
+        });
+
         return view;
     }
 
@@ -64,11 +113,62 @@ public class AddInventoryItemActivityFragment extends Fragment {
             date = GroceriesContract.normalizeDate(date);
 
             mDateText.setText(Utility.getFormattedDate(date));
+            mEnteredDate = date;
         }
     }
 
     public void showDatePickerDialog() {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    private void addInventoryItemToDb(){
+        String name = mNameTxt.getText().toString();
+        String qtyString = mQuantityTxt.getText().toString();
+
+        if(name == null || name.length() == 0){
+            Toast.makeText(getActivity()
+                    , R.string.item_name_is_empty
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(qtyString == null || qtyString.length() == 0){
+            Toast.makeText(getActivity()
+                    , R.string.inventory_item_qunatity_is_empty
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(GroceriesContract.InventoryEntry.COLUMN_NAME, name);
+        values.put(GroceriesContract.InventoryEntry.COLUMN_QUANTITY, Integer.parseInt(qtyString));
+        values.put(GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE, mEnteredDate);
+        values.put(GroceriesContract.InventoryEntry.COLUMN_STATUS, GroceriesContract.InventoryEntry.STATUS_ACTIVE);
+
+        try {
+            Uri uri = getActivity().getContentResolver().insert(GroceriesContract.InventoryEntry.CONTENT_URI, values);
+
+            long itemId = ContentUris.parseId(uri);
+
+            if(itemId != -1) {
+                Toast.makeText(getActivity()
+                        , getActivity().getString(R.string.inventory_item_saved)
+                        , Toast.LENGTH_SHORT).show();
+
+                mNameTxt.setText("");
+                mQuantityTxt.setText("");
+                mEnteredDate = 0;
+                mDateText.setText("");
+
+                Utility.addItemNameEntry(getActivity(), name);
+            }
+        } catch (SQLException ex){
+            Toast.makeText(getActivity()
+                    , R.string.item_already_on_the_list
+                    , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
 }

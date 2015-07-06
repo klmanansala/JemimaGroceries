@@ -1,7 +1,9 @@
 package klmanansala.apps.jemimasgroceries;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 
 import java.text.SimpleDateFormat;
 
@@ -31,5 +33,16 @@ public class Utility {
                 , select
                 , selectArgs
                 , null);
+    }
+
+    public static void addItemNameEntry(Context context, String name){
+        ContentValues itemNameValues = new ContentValues();
+        itemNameValues.put(GroceriesContract.ItemNameEntry.COLUMN_NAME, name);
+
+        try {
+            context.getContentResolver().insert(GroceriesContract.ItemNameEntry.CONTENT_URI, itemNameValues);
+        } catch (SQLException ex){
+            //just ignore, thsi is a case of the item name saved already in the db
+        }
     }
 }
