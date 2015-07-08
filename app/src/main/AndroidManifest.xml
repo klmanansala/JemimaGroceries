@@ -53,6 +53,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="klmanansala.apps.jemimasgroceries.MainActivity" />
         </activity>
+
+        <service android:name=".service.NotificationService" />
+        <receiver android:name=".service.NotificationService$AlarmReceiver" android:enabled="true"/>
+
     </application>
 
 </manifest>

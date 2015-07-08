@@ -42,4 +42,6 @@
     <string name="grocery_item_deleted">Grocery item was deleted!</string>
     <string name="inventory_item_updated">Inventory item was updated!</string>
     <string name="inventory_item_deleted">Inventory item was updated!</string>
+
+    <string name="expiring_items">The following items are expiring: </string>
 </resources>

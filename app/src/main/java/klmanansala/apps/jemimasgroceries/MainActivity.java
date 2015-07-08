@@ -2,13 +2,20 @@ package klmanansala.apps.jemimasgroceries;
 
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import klmanansala.apps.jemimasgroceries.service.NotificationService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,6 +41,8 @@ public class MainActivity extends ActionBarActivity {
                 .setTabListener(new TabListener<InventoryFragment>(
                         this, "inventory", InventoryFragment.class));
         actionBar.addTab(tab);
+
+
     }
 
 
