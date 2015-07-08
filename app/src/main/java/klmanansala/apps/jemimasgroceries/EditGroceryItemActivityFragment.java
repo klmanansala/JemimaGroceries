@@ -55,6 +55,8 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_grocery_item, container, false);
 
+
+
         Button saveBtn = (Button) view.findViewById(R.id.btn_save_grocery);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,11 +114,14 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
         }
 
         itemId = data.getLong(COL_ID);
+
+        //for autocomplete suggestions
+        nameTxt.setAdapter(Utility.createItemNamesAdapter(getActivity()));
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        //do nothing
     }
 
     long getIdPassedToFragment(){
@@ -176,6 +181,10 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
             Log.d(LOG_TAG, "Updating grocery item with id = " + itemId + " returned a count not equal to one.");
         }
 
+        Toast.makeText(getActivity()
+            , R.string.grocery_item_updated
+            , Toast.LENGTH_SHORT).show();
+
         getActivity().finish();
     }
 
@@ -190,6 +199,10 @@ public class EditGroceryItemActivityFragment extends Fragment implements LoaderM
         if(count != 1){
             Log.d(LOG_TAG, "Deleting grocery item with id = " + itemId + " returned a count not equal to one.");
         }
+
+        Toast.makeText(getActivity()
+            , R.string.grocery_item_deleted
+            , Toast.LENGTH_SHORT).show();
 
         getActivity().finish();
     }

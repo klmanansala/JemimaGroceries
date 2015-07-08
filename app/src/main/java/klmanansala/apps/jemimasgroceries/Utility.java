@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.widget.FilterQueryProvider;
 
 import java.text.SimpleDateFormat;
 
@@ -44,5 +46,31 @@ public class Utility {
         } catch (SQLException ex){
             //just ignore, thsi is a case of the item name saved already in the db
         }
+    }
+
+    public static SimpleCursorAdapter createItemNamesAdapter(final Context context){
+        //for autocomplete suggestions
+        SimpleCursorAdapter itemNamesAdapter = new SimpleCursorAdapter(context
+                , android.R.layout.simple_list_item_1
+                , null
+                , new String[] {GroceriesContract.ItemNameEntry.COLUMN_NAME}
+                , new int[] { android.R.id.text1}
+                , 0);
+
+        itemNamesAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                return getItemNamesCursor(context, constraint);
+            }
+        });
+
+        itemNamesAdapter.setCursorToStringConverter(new android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter() {
+            public CharSequence convertToString(Cursor cur) {
+                int index = cur.getColumnIndex(GroceriesContract.ItemNameEntry.COLUMN_NAME);
+                return cur.getString(index);
+            }
+        });
+
+        return itemNamesAdapter;
     }
 }

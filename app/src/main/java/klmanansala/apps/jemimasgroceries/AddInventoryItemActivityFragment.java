@@ -4,13 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FilterQueryProvider;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -57,27 +54,7 @@ public class AddInventoryItemActivityFragment extends Fragment {
         mQuantityTxt = (EditText) view.findViewById(R.id.text_inventory_item_qty);
 
         //for autocomplete suggestions
-        SimpleCursorAdapter itemNamesAdapter = new SimpleCursorAdapter(getActivity()
-                , android.R.layout.simple_list_item_1
-                , null
-                , new String[] {GroceriesContract.ItemNameEntry.COLUMN_NAME}
-                , new int[] { android.R.id.text1}
-                , 0);
-        mNameTxt.setAdapter(itemNamesAdapter);
-
-        itemNamesAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-            @Override
-            public Cursor runQuery(CharSequence constraint) {
-                return Utility.getItemNamesCursor(getActivity(), constraint);
-            }
-        });
-
-        itemNamesAdapter.setCursorToStringConverter(new android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter() {
-            public CharSequence convertToString(Cursor cur) {
-                int index = cur.getColumnIndex(GroceriesContract.ItemNameEntry.COLUMN_NAME);
-                return cur.getString(index);
-            }
-        });
+        mNameTxt.setAdapter(Utility.createItemNamesAdapter(getActivity()));
 
         Button addBtn = (Button) view.findViewById(R.id.btn_add_inventory);
         addBtn.setOnClickListener(new View.OnClickListener() {

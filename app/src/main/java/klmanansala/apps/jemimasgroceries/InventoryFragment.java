@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -46,6 +47,21 @@ public class InventoryFragment extends Fragment implements LoaderManager.LoaderC
 
         ListView groceryList = (ListView) view.findViewById(R.id.listview_inventory);
         groceryList.setAdapter(mInventoryAdapter);
+
+        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+                if(cursor != null){
+                    long itemId = cursor.getLong(COL_ID);
+
+                    Intent intent = new Intent(getActivity(), EditInventoryItemActivity.class);
+                    intent.putExtra(GroceriesContract.InventoryEntry._ID, itemId);
+                    startActivity(intent);
+                }
+            }
+        });
 
         ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_inventory);
         addButton.setOnClickListener(new View.OnClickListener() {

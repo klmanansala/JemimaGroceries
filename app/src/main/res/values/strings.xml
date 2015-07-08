@@ -36,4 +36,10 @@
     <string name="format_exp_date_inventory_list_item">
         Exp date: <xliff:g id="date">%1$s</xliff:g></string>
     <string name="none">none</string>
+    <string name="title_activity_edit_inventory_item">EditInventoryItemActivity</string>
+
+    <string name="grocery_item_updated">Grocery item was updated!</string>
+    <string name="grocery_item_deleted">Grocery item was deleted!</string>
+    <string name="inventory_item_updated">Inventory item was updated!</string>
+    <string name="inventory_item_deleted">Inventory item was updated!</string>
 </resources>
