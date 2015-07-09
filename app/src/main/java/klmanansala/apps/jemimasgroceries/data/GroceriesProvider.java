@@ -29,6 +29,9 @@ public class GroceriesProvider extends ContentProvider {
     private static final String sInventoryItemNameSelectionUsingLike =
             GroceriesContract.InventoryEntry.COLUMN_NAME + " LIKE ? ";
 
+    private static final String sInventoryItemNameSelectionUsingEqual =
+            GroceriesContract.InventoryEntry.COLUMN_NAME + " = ? ";
+
     private static final String sInventoryLessThanGivenDateSelection =
             GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " <= ? ";
 
@@ -99,8 +102,8 @@ public class GroceriesProvider extends ContentProvider {
     private Cursor getInventoryByName(Uri uri, String[] projection, String sortOrder){
         String name = GroceriesContract.InventoryEntry.getNameFromUri(uri);
 
-        String selection = sInventoryItemNameSelectionUsingLike;
-        String[] selectionArgs = new String[]{"%" + name + "%"};
+        String selection = sInventoryItemNameSelectionUsingEqual;
+        String[] selectionArgs = new String[]{name};
 
         return mOpenHelper.getReadableDatabase().query(
                 GroceriesContract.InventoryEntry.TABLE_NAME,

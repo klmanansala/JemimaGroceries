@@ -44,4 +44,12 @@
     <string name="inventory_item_deleted">Inventory item was updated!</string>
 
     <string name="expiring_items">Some of your stored items are expiring.</string>
+
+    <string name="add_anyway">Add it anyway</string>
+    <string name="dont_add">Don\'t add</string>
+
+    <string name="format_available_inventory_list_item">
+        You have <xliff:g id="qty">%1$s</xliff:g>
+        of this item <xliff:g id="name">%2$s</xliff:g>
+        in you inventory.</string>
 </resources>
