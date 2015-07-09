@@ -43,5 +43,5 @@
     <string name="inventory_item_updated">Inventory item was updated!</string>
     <string name="inventory_item_deleted">Inventory item was updated!</string>
 
-    <string name="expiring_items">The following items are expiring: </string>
+    <string name="expiring_items">Some of your stored items are expiring.</string>
 </resources>
