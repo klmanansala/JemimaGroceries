@@ -16,12 +16,6 @@
         android:layout_alignParentStart="true"
         android:layout_weight="1" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_add_groceries"
-        android:src="@drawable/add_icon" />
-
     <TextView
         android:id="@+id/empty_grocery_list"
         android:text="@string/empty_grocery_list"

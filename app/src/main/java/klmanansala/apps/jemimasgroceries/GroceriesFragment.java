@@ -9,10 +9,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
@@ -43,6 +45,7 @@ public class GroceriesFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_groceries, container, false);
 
         mGroceriesAdapter = new GroceriesAdapter(getActivity(), null, 0);
@@ -68,15 +71,23 @@ public class GroceriesFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
-        ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_groceries);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addGroceryIntent = new Intent(getActivity(), AddGroceryActivity.class);
-                startActivity(addGroceryIntent);
-            }
-        });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_groceries_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_add_grocery){
+            Intent addGroceryIntent = new Intent(getActivity(), AddGroceryActivity.class);
+            startActivity(addGroceryIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
