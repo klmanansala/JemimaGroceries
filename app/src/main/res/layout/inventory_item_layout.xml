@@ -15,13 +15,14 @@
         android:src="@drawable/inventory_item" />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_inventory"
         android:layout_weight="3"
         android:text="sample item"
         android:paddingLeft="8dp"
-        android:fontFamily="sans-serif-medium" >
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp">
     </TextView>
 
     <TextView
@@ -30,7 +31,7 @@
         android:id="@+id/list_item_inventory_exp_date"
         android:text="Exp date: July 4, 2015"
         android:fontFamily="sans-serif-light"
-        android:textAppearance="?android:textAppearanceSmall">
+        android:textSize="12sp">
 
     </TextView>
 </LinearLayout>

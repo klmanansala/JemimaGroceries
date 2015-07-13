@@ -16,13 +16,14 @@
         android:src="@drawable/grocery_item" />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_grocery"
         android:layout_weight="3"
         android:text="sample item"
         android:paddingLeft="8dp"
-        android:fontFamily="sans-serif-medium" >
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp">
     </TextView>
 
     <CheckBox

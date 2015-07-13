@@ -52,4 +52,6 @@
         You have <xliff:g id="qty">%1$s</xliff:g>
         of this item <xliff:g id="name">%2$s</xliff:g>
         in you inventory.</string>
+
+    <string name="empty_inventory_list">No items in storage.</string>
 </resources>

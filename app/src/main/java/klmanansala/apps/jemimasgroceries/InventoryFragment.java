@@ -8,10 +8,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
@@ -41,19 +43,23 @@ public class InventoryFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
 
         mInventoryAdapter = new InventoryAdapter(getActivity(), null, 0);
 
-        ListView groceryList = (ListView) view.findViewById(R.id.listview_inventory);
-        groceryList.setAdapter(mInventoryAdapter);
+        ListView inventoryList = (ListView) view.findViewById(R.id.listview_inventory);
+        inventoryList.setAdapter(mInventoryAdapter);
 
-        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        View emptyView = view.findViewById(R.id.empty_inventory_list);
+        inventoryList.setEmptyView(emptyView);
+
+        inventoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                if(cursor != null){
+                if (cursor != null) {
                     long itemId = cursor.getLong(COL_ID);
 
                     Intent intent = new Intent(getActivity(), EditInventoryItemActivity.class);
@@ -63,16 +69,23 @@ public class InventoryFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
-        ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_inventory);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addInventoryIntent = new Intent(getActivity(), AddInventoryItemActivity.class);
-                startActivity(addInventoryIntent);
-            }
-        });
-
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_inventory_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_add_inventory){
+            Intent addInventoryIntent = new Intent(getActivity(), AddInventoryItemActivity.class);
+            startActivity(addInventoryIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
