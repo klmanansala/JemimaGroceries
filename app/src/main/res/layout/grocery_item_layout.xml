@@ -8,6 +8,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/grocery_item_touch_selector"
     android:gravity="center_vertical">
 
     <ImageView
@@ -23,7 +24,8 @@
         android:text="sample item"
         android:paddingLeft="8dp"
         android:fontFamily="sans-serif-medium"
-        android:textSize="14sp">
+        android:textSize="14sp"
+        android:textColor="#ffffffff">
     </TextView>
 
     <CheckBox

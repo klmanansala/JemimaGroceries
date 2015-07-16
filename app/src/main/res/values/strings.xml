@@ -3,6 +3,7 @@
     <string name="title_activity_add_grocery">Add a grocery item</string>
     <string name="title_activity_add_inventory_item">Add an inventory item</string>
     <string name="title_activity_edit_grocery_item">Edit grocery item</string>
+    <string name="title_activity_edit_inventory_item">Edit inventory item</string>
 
     <string name="hello_world">Hello world!</string>
 
@@ -37,7 +38,6 @@
     <string name="format_exp_date_inventory_list_item">
         Exp date: <xliff:g id="date">%1$s</xliff:g></string>
     <string name="none">none</string>
-    <string name="title_activity_edit_inventory_item">EditInventoryItemActivity</string>
 
     <string name="grocery_item_updated">Grocery item was updated!</string>
     <string name="grocery_item_deleted">Grocery item was deleted!</string>

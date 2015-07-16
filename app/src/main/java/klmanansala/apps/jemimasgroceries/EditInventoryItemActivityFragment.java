@@ -124,7 +124,9 @@ public class EditInventoryItemActivityFragment extends Fragment implements Loade
         mQtyTxt.setText(Integer.toString(data.getInt(COL_QTY)));
 
         long date = data.getLong(COL_EXP_DATE);
-        mDateText.setText(Utility.getFormattedDate(date));
+        if(date != 0) {
+            mDateText.setText(Utility.getFormattedDate(date));
+        }
         mEnteredDate = date;
 
         itemId = data.getLong(COL_ID);
