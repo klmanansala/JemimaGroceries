@@ -7,4 +7,9 @@
         android:icon="@drawable/add_icon"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/action_put_to_inventory"
+        android:title="@string/btn_store"
+        android:icon="@drawable/store_icon"
+        app:showAsAction="ifRoom" />
+
 </menu>

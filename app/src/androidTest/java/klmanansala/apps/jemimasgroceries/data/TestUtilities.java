@@ -58,6 +58,24 @@ public class TestUtilities extends AndroidTestCase {
         return inventoryValues;
     }
 
+    public static ContentValues[] createBulkInventoryValues() {
+        ContentValues values[] = new ContentValues[5];
+
+        for(int ctr=1; ctr <= 5; ctr++){
+            ContentValues inventoryValues = new ContentValues();
+            inventoryValues.put(GroceriesContract.InventoryEntry.COLUMN_NAME, "dummy name " + ctr);
+            inventoryValues.put(GroceriesContract.InventoryEntry.COLUMN_QUANTITY, ctr);
+            inventoryValues.put(GroceriesContract.InventoryEntry.COLUMN_STATUS, 1);
+
+            long dateToday = Calendar.getInstance().getTimeInMillis();
+            dateToday = GroceriesContract.normalizeDate(dateToday);
+            inventoryValues.put(GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE, dateToday);
+            values[ctr-1] = inventoryValues;
+        }
+
+        return values;
+    }
+
     /*
         The functions of TestProvider use this utility class to test
         the ContentObserver callbacks using the PollingCheck class that we grabbed from the Android

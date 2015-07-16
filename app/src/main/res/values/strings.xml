@@ -32,6 +32,7 @@
     <string name="btn_add">Add</string>
     <string name="btn_save">Save</string>
     <string name="btn_delete">Delete</string>
+    <string name="btn_store">Store</string>
 
     <string name="format_exp_date_inventory_list_item">
         Exp date: <xliff:g id="date">%1$s</xliff:g></string>
@@ -51,7 +52,18 @@
     <string name="format_available_inventory_list_item">
         You have <xliff:g id="qty">%1$s</xliff:g>
         of this item <xliff:g id="name">%2$s</xliff:g>
-        in you inventory.</string>
+        in your inventory.</string>
 
     <string name="empty_inventory_list">No items in storage.</string>
+
+    <string name="nothing_to_move_to_inventory">
+        You have no checked grocery items to move to inventory.</string>
+
+    <string name="ready_to_store">Ready to store checked items to inventory?</string>
+
+    <string name="yes">Yes</string>
+    <string name="not_yet">Not yet</string>
+
+    <string name="grocery_items_saved_to_inventory">Checked grocery items have been
+        stored in inventory. Make sure to set their expiration dates!</string>
 </resources>

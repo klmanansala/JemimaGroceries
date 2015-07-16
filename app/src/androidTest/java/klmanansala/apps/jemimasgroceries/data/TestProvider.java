@@ -509,4 +509,42 @@ public class TestProvider extends AndroidTestCase{
         mContext.getContentResolver().unregisterContentObserver(groceryObserver);
         mContext.getContentResolver().unregisterContentObserver(inventoryObserver);
     }
+
+    public void testBulkInsertForInventory() {
+        ContentValues[] bulkInsertContentValues = TestUtilities.createBulkInventoryValues();
+
+        // Register a content observer for our bulk insert.
+        TestUtilities.TestContentObserver weatherObserver = TestUtilities.getTestContentObserver();
+        mContext.getContentResolver().registerContentObserver(GroceriesContract.InventoryEntry.CONTENT_URI, true, weatherObserver);
+
+        int insertCount = mContext.getContentResolver().bulkInsert(GroceriesContract.InventoryEntry.CONTENT_URI, bulkInsertContentValues);
+
+        // If this fails, it means that you most-likely are not calling the
+        // getContext().getContentResolver().notifyChange(uri, null); in your BulkInsert
+        // ContentProvider method.
+        weatherObserver.waitForNotificationOrFail();
+        mContext.getContentResolver().unregisterContentObserver(weatherObserver);
+
+        assertEquals(insertCount, 5);
+
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = mContext.getContentResolver().query(
+                GroceriesContract.InventoryEntry.CONTENT_URI,
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null
+        );
+
+        // we should have as many records in the database as we've inserted
+        assertEquals(cursor.getCount(), 5);
+
+        // and let's make sure they match the ones we created
+        cursor.moveToFirst();
+        for ( int i = 0; i < 5; i++, cursor.moveToNext() ) {
+            TestUtilities.validateCurrentRecord("testBulkInsert.  Error validating InventoryEntry " + i,
+                    cursor, bulkInsertContentValues[i]);
+        }
+
+    }
 }
