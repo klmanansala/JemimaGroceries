@@ -21,7 +21,7 @@ import klmanansala.apps.jemimasgroceries.data.GroceriesContract;
 /**
  * Created by kevin on 7/8/15.
  */
-public class NotificationService extends IntentService {
+public class JemimasGroceriesNotificationService extends IntentService {
 
     private static final String[] COLUMNS = {
             GroceriesContract.InventoryEntry._ID
@@ -33,7 +33,7 @@ public class NotificationService extends IntentService {
 
     private static final int NOTIFICATION_ID = 1234;
 
-    public NotificationService() {
+    public JemimasGroceriesNotificationService() {
         super("NotificationService");
     }
 
@@ -45,7 +45,7 @@ public class NotificationService extends IntentService {
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Intent notifIntent = new Intent(context, NotificationService.class);
+            Intent notifIntent = new Intent(context, JemimasGroceriesNotificationService.class);
             context.startService(notifIntent);
         }
     }

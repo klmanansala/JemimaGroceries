@@ -115,8 +115,8 @@ public class AddGroceryActivityFragment extends Fragment {
                         , context.getString(R.string.grocery_item_saved)
                         , Toast.LENGTH_SHORT).show();
 
-                mNameTxt.setText("");
                 mQuantityTxt.setText("");
+                mNameTxt.setText("");
 
                 Utility.addItemNameEntry(context, name);
             }

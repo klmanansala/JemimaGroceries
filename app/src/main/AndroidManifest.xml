@@ -54,8 +54,9 @@
                 android:value="klmanansala.apps.jemimasgroceries.MainActivity" />
         </activity>
 
-        <service android:name=".service.NotificationService" />
-        <receiver android:name=".service.NotificationService$AlarmReceiver" android:enabled="true"/>
+        <service android:name=".service.JemimasGroceriesNotificationService" />
+        <receiver android:name=".service.JemimasGroceriesNotificationService$AlarmReceiver"
+            android:enabled="true"/>
 
     </application>
 

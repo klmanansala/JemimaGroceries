@@ -35,7 +35,7 @@ public class InventoryAdapter extends CursorAdapter {
         long date = cursor.getLong(InventoryFragment.COL_DATE);
         String dateString = context.getString(R.string.none);
 
-        if(date != 0){
+        if(date > 0){
             dateString = Utility.getFormattedDate(date);
         }
 
