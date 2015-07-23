@@ -60,7 +60,7 @@ public class JemimasGroceriesNotificationService extends IntentService {
         if(cursor.moveToFirst()){
             String contentText = context.getString(R.string.expiring_items);
             String title = context.getString(R.string.app_name);
-            int iconId = R.mipmap.ic_launcher;
+            int iconId = R.drawable.grocery_item;
 
             NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context);
             notifBuilder.setContentText(contentText);

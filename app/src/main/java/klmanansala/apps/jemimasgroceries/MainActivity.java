@@ -2,7 +2,12 @@ package klmanansala.apps.jemimasgroceries;
 
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -10,8 +15,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import klmanansala.apps.jemimasgroceries.service.JemimasGroceriesNotificationService;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    private static long oneDayInMilliSeconds = 1000 * 60 * 60 * 24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,15 @@ public class MainActivity extends ActionBarActivity {
         actionBar.addTab(tab);
 
 
+        Intent notifyIntent = new Intent(this
+                , JemimasGroceriesNotificationService.AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notifyIntent
+                , PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        1000, oneDayInMilliSeconds, pendingIntent);
     }
 
 
