@@ -134,9 +134,11 @@ public class AddInventoryItemActivityFragment extends Fragment {
                         , Toast.LENGTH_SHORT).show();
 
                 mNameTxt.setText("");
+                mNameTxt.requestFocus();
                 mQuantityTxt.setText("");
                 mEnteredDate = 0;
                 mDateText.setText("");
+
 
                 Utility.addItemNameEntry(getActivity(), name);
             }

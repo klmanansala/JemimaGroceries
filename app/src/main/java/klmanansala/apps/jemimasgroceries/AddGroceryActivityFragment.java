@@ -117,6 +117,7 @@ public class AddGroceryActivityFragment extends Fragment {
 
                 mQuantityTxt.setText("");
                 mNameTxt.setText("");
+                mNameTxt.requestFocus();
 
                 Utility.addItemNameEntry(context, name);
             }
