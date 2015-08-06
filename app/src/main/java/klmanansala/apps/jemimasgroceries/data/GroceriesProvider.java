@@ -212,6 +212,7 @@ public class GroceriesProvider extends ContentProvider {
 
         switch (match) {
             case GROCERIES: {
+                formatItemName(values);
                 long _id = db.insert(GroceriesContract.GroceryEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = GroceriesContract.GroceryEntry.buildGroceryUri(_id);
@@ -220,6 +221,7 @@ public class GroceriesProvider extends ContentProvider {
                 break;
             }
             case INVENTORY: {
+                formatItemName(values);
                 normalizeDate(values);
                 long _id = db.insert(GroceriesContract.InventoryEntry.TABLE_NAME, null, values);
                 if ( _id > 0 ){
@@ -230,7 +232,7 @@ public class GroceriesProvider extends ContentProvider {
                 break;
             }
             case ITEMNAMES: {
-                nameToLowerCase(values);
+                formatItemName(values);
                 long _id = db.insert(GroceriesContract.ItemNameEntry.TABLE_NAME, null, values);
                 if ( _id > 0 ){
                     returnUri = GroceriesContract.ItemNameEntry.buildItemNameUri(_id);
@@ -254,13 +256,24 @@ public class GroceriesProvider extends ContentProvider {
         }
     }
 
-    private void nameToLowerCase(ContentValues values){
+    private void formatItemName(ContentValues values){
+        String key = null;
+        String name = null;
         if (values.containsKey(GroceriesContract.ItemNameEntry.COLUMN_NAME)){
-            String name = values.getAsString(GroceriesContract.ItemNameEntry.COLUMN_NAME);
-            if(name != null) {
-                name = name.toLowerCase();
-                values.put(GroceriesContract.ItemNameEntry.COLUMN_NAME, name);
-            }
+            key = GroceriesContract.ItemNameEntry.COLUMN_NAME;
+            name = values.getAsString(GroceriesContract.ItemNameEntry.COLUMN_NAME);
+        } else if(values.containsKey(GroceriesContract.GroceryEntry.COLUMN_NAME)){
+            key = GroceriesContract.GroceryEntry.COLUMN_NAME;
+            name = values.getAsString(GroceriesContract.GroceryEntry.COLUMN_NAME);
+        } else if(values.containsKey(GroceriesContract.InventoryEntry.COLUMN_NAME)){
+            key = GroceriesContract.InventoryEntry.COLUMN_NAME;
+            name = values.getAsString(GroceriesContract.InventoryEntry.COLUMN_NAME);
+        }
+
+        if(name != null) {
+            name = name.toLowerCase();
+            name = name.replaceFirst(name.substring(0,1), name.substring(0,1).toUpperCase());
+            values.put(key, name);
         }
     }
 
@@ -304,16 +317,18 @@ public class GroceriesProvider extends ContentProvider {
 
         switch (match) {
             case GROCERIES: {
+                formatItemName(values);
                 rowsUpdated = db.update(GroceriesContract.GroceryEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             case INVENTORY: {
+                formatItemName(values);
                 normalizeDate(values);
                 rowsUpdated = db.update(GroceriesContract.InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             case ITEMNAMES: {
-                nameToLowerCase(values);
+                formatItemName(values);
                 rowsUpdated = db.update(GroceriesContract.ItemNameEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
@@ -338,6 +353,7 @@ public class GroceriesProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
+                        formatItemName(value);
                         normalizeDate(value);
                         long _id = db.insert(GroceriesContract.InventoryEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
