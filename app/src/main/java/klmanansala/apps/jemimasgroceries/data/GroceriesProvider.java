@@ -33,7 +33,8 @@ public class GroceriesProvider extends ContentProvider {
             GroceriesContract.InventoryEntry.COLUMN_NAME + " = ? ";
 
     private static final String sInventoryLessThanGivenDateSelection =
-            GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " <= ? ";
+            GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " <= ? "
+            + " AND " + GroceriesContract.InventoryEntry.COLUMN_EXPIRATION_DATE + " > 0 ";
 
     public static final String sActiveGrocerySelection =
             GroceriesContract.GroceryEntry.COLUMN_STATUS + " = "

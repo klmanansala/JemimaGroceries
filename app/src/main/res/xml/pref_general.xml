@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:title="@string/pref_grocery_time_notif_title"
+        android:key="@string/pref_grocery_time_notif_key">
+
+        <CheckBoxPreference
+            android:key="@string/pref_grocery_time_notif_enable_key"
+            android:title="@string/pref_grocery_time_notif_enable_title"
+            android:defaultValue="@string/pref_grocery_time_notif_enable_deafult"
+            android:summaryOn="@string/pref_grocery_time_notif_enable_true"
+            android:summaryOff="@string/pref_grocery_time_notif_enable_false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

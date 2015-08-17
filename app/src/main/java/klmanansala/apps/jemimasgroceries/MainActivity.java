@@ -15,6 +15,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.purplebrain.adbuddiz.sdk.AdBuddiz;
+
 import klmanansala.apps.jemimasgroceries.service.JemimasGroceriesNotificationService;
 
 
@@ -54,6 +56,10 @@ public class MainActivity extends ActionBarActivity {
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
                         1000, oneDayInMilliSeconds, pendingIntent);
+
+        //initialize AdBuddiz
+        AdBuddiz.setPublisherKey("81d4e343-972b-46de-9bdd-48aadadf378c");
+        AdBuddiz.cacheAds(this);
     }
 
 
@@ -107,6 +113,13 @@ public class MainActivity extends ActionBarActivity {
             } else {
                 // If it exists, simply attach it in order to show it
                 ft.attach(mFragment);
+
+                //show ad when navigating to inventory tab
+                if(mTag.equals("inventory")){
+                    if(AdBuddiz.isReadyToShowAd(mActivity)){
+                        AdBuddiz.showAd(mActivity);
+                    }
+                }
             }
         }
 
